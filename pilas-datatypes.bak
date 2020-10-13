@@ -1,0 +1,30 @@
+#lang eopl
+
+;; <Pila> :: ('Pila-Vacia)
+;;        :: ('Pila-Valor scheme-value <Pila>)
+
+(define-datatype stack-type stack?
+  (empty-stack)
+  (push
+         [value always?];se utiliza el always para validar que es cualquier valor de scheme
+         [saved-stack stack?]
+  )
+ )
+
+(define pop
+  (lambda (stack)
+    (cases stack-type stack
+      [empty-stack () (eopl:error 'pop "No se puede eliminar un elemento de una lista vacía.")]
+      [push (val saved-stack) saved-stack])))
+
+(define top
+  (lambda (stack)
+    (cases stack-type stack
+      [empty-stack () (eopl:error 'pop "No se puede obtener el primer elemento de una lista vacía.")]
+      [push (val saved-stack) val])))
+
+(define empty-stack?
+  (lambda (stack)
+    (cases stack-type stack
+      [empty-stack () #t]
+      [push (val saved-stack) #f])))

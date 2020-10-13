@@ -1,0 +1,57 @@
+#lang eopl
+(define base 16)
+(define zero (lambda () '()))
+(define is-zero? (lambda (n) (null? n)))
+
+(define successor
+  (lambda (n)
+    (if (is-zero? n)
+	'(1)
+	(let ((t (+ (car n) 1)))
+	  (if (= t base)
+	      (cons 0 (successor (cdr n)))
+	      (cons t (cdr n)))))))
+
+(define predecessor
+  (lambda (n)
+    (cond
+     ((is-zero? n) #f)
+     ((>= (car n) base) #f)
+     ((equal? n '(1)) '())
+     ((zero? (car n))
+      (if (null? (cdr n))
+	  #f
+	  (cons (- base 1) (predecessor (cdr n)))))
+      (else (cons (- (car n) 1) (cdr n))))))
+
+
+(define suma
+  (lambda (x y)
+    (if (is-zero? x)
+        y
+        (successor (suma (predecessor x) y)))))
+
+(define resta
+  (lambda (x y)
+    (if (is-zero? y)
+        x
+        (predecessor (resta  x (predecessor y))))))
+
+(define multiplicacion
+  (lambda (x y)
+    (if (is-zero? x)
+        (zero)
+        (suma (multiplicacion (predecessor x) y) y))
+    ))
+    
+(define potencia
+  (lambda (x y)
+    (if (is-zero? y)
+        (successor y)
+        (multiplicacion (potencia x (predecessor y)) x))))
+
+(define factorial
+  (lambda (n)
+    (if (is-zero? n)
+        (successor n)
+        (multiplicacion n (factorial (predecessor n))))))

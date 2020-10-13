@@ -1,0 +1,29 @@
+#lang eopl
+
+;; <Pila> :: ('Pila-Vacia)
+;;        :: ('Pila-Valor scheme-value <Pila>)
+
+;empty-stack
+(define empty-stack
+  (lambda ()
+    (lambda (command)
+      (cond [(eqv? command 'empty?) #t]))))
+
+(define push
+  (lambda (stack val)
+    (lambda (command)
+      (cond [(eqv? command 'empty?) #f]
+            [(eqv? command 'pop) stack]
+            [(eqv? command 'top) val]))))
+
+(define pop
+  (lambda (stack)
+    (stack 'pop)))
+
+(define top
+  (lambda (stack)
+    (stack 'top)))
+
+(define empty-stack?
+  (lambda (stack)
+    (stack 'empty?)))
